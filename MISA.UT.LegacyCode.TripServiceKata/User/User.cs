@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MISA.UT.LegacyCode.TripServiceKata.User
 {
@@ -25,6 +26,11 @@ namespace MISA.UT.LegacyCode.TripServiceKata.User
         public List<Trip.Trip> Trips()
         {
             return trips;
-        } 
+        }
+
+        public bool IsMyFriend(User otherUser)
+        {
+            return friends.Contains(otherUser);
+        }
     }
 }

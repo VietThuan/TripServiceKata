@@ -6,31 +6,25 @@ namespace MISA.UT.LegacyCode.TripServiceKata.Trip
 {
     public class TripService
     {
-        public List<Trip> GetTripsByUser(User.User user)
+        private readonly ITripDAO tripDao;
+
+        public TripService(ITripDAO tripDao)
         {
-            List<Trip> tripList = new List<Trip>();
-            User.User loggedUser = UserSession.GetInstance().GetLoggedUser();
-            bool isFriend = false;
-            if (loggedUser != null)
-            {
-                foreach(User.User friend in user.GetFriends())
-                {
-                    if (friend.Equals(loggedUser))
-                    {
-                        isFriend = true;
-                        break;
-                    }
-                }
-                if (isFriend)
-                {
-                    tripList = TripDAO.FindTripsByUser(user);
-                }
-                return tripList;
-            }
-            else
+            this.tripDao = tripDao;
+        }
+
+        public List<Trip> GetTripsByUser(User.User user, User.User userlogged)
+        {
+            //User.User loggedUser = GetLoggedUser();
+            if (userlogged == null)
             {
                 throw new UserNotLoggedInException();
             }
+
+            return user.IsMyFriend(userlogged) ? tripDao.FindTripsBy(user) : new List<Trip>();
+
+           
         }
+
     }
 }
